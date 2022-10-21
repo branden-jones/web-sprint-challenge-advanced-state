@@ -20,14 +20,6 @@ function wheel(state = initialWheelState, action) {
       
 }
 
-
-
-
-
-
-
-
-
 const initialQuizState = null
 function quiz(state = initialQuizState, action) {
   // switch (action.type) {
