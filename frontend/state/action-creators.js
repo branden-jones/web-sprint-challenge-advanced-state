@@ -1,7 +1,29 @@
 // ❗ You don't need to add extra action creators to achieve MVP
-export function moveClockwise() { }
 
-export function moveCounterClockwise() { }
+// ******    These are ACTIONS being Imported    ******
+
+import * as types from "./action-types"
+
+// these are CREATORS ******
+
+export function moveClockwise(num) {
+  let payload = num + 1
+  if (num + 1 === 6) {
+    payload = 0;
+    return { type: types.MOVE_CLOCKWISE, payload}
+  };
+  return { type: types.MOVE_CLOCKWISE, payload }
+}
+
+export function moveCounterClockwise(num) { 
+  let payload = num - 1
+  if (num === 0){ 
+    payload = 5
+    return { type: types.MOVE_COUNTERCLOCKWISE, payload}}
+  return { type: types.MOVE_COUNTERCLOCKWISE, payload}
+}
+
+
 
 export function selectAnswer() { }
 
