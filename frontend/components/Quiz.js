@@ -1,9 +1,18 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux';
+import { selectAnswer, fetchQuiz, setQuiz } from '../state/action-creators';
 
 function Quiz(props) {
-  console.log(`quiz props`, props)
-  const { quiz, message, selected } = props
+console.log(`Quiz Props`,props)
+  const { quiz, selectedAnswer, selectAnswer, fetchQuiz, setQuiz } = props
+
+// useEffect(() => {
+//   fetchQuiz()
+// },[])
+
+
+// step one... get quiz coming from axios... what is the request question and options....
+// step two... map options... with key = optionId... if key = optionId... 'selected' : ''
   return (
     <div id="wrapper">
       {
@@ -12,22 +21,22 @@ function Quiz(props) {
             <h2>What is a closure?</h2>
 
             <div id="quizAnswers">
-              <div className="answer selected">
+              <div className={`answer ${selectedAnswer}`}>
                 A function
-                <button>
-                  SELECTED
+                <button onClick={() => selectAnswer(selectedAnswer)}>
+                  {selectedAnswer ? `SELECTED` : `Select`}
                 </button>
               </div>
 
-              <div className="answer">
+              <div className={`answer ${selectedAnswer}`}>
                 An elephant
-                <button>
-                  Select
+                <button onClick={() => selectAnswer(selectedAnswer)}>
+                {selectedAnswer ? `SELECTED` : `Select`}
                 </button>
               </div>
             </div>
-
-            <button id="submitAnswerBtn">Submit answer</button>
+{/*  The "Submit answer" button in the quiz stays disabled until an answer is selected.*/}
+            <button id="submitAnswerBtn" onClick={fetchQuiz()}>Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
@@ -35,8 +44,11 @@ function Quiz(props) {
   )
 }
 
-export default connect(st => ({
+export default connect(st => 
+  (console.log(st),{
+  form: st.form,
   quiz: st.quiz,
-  message: st.infoMessage,
-  selected: st.selectedAnswer
-}), {})(Quiz);
+  infoMessage: st.infoMessage,
+  selectedAnswer: st.selectedAnswer
+})
+,{selectAnswer: selectAnswer, fetchQuiz: fetchQuiz, setQuiz: setQuiz})(Quiz);

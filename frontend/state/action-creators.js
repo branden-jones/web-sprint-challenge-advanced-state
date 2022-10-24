@@ -1,10 +1,7 @@
 // ❗ You don't need to add extra action creators to achieve MVP
 
-// ******    These are ACTIONS being Imported    ******
-
 import * as types from "./action-types"
-
-// these are CREATORS ******
+import axios from "axios";
 
 export function moveClockwise(num) {
   let payload = num + 1
@@ -25,19 +22,53 @@ export function moveCounterClockwise(num) {
 
 
 
-export function selectAnswer() { }
+export function selectAnswer(props) {
+  let payload = props;
+  if ( payload === null || payload === ''){
+    payload = 'selected'
+  }
+  else { payload = ''}
+    return {type: types.SET_SELECTED_ANSWER, payload}
+  
+  }
 
-export function setMessage() { }
 
-export function setQuiz() { }
+export function setMessage(message) {
+  const payload = `${message}`;
+  return { type: types.SET_INFO_MESSAGE, payload}
+}
 
-export function inputChange() { }
+export function setQuiz(quiz) {
+  const payload = {
+    id: quiz.quiz_id,
+    quesiton: quiz.question,
+    answer1: quiz.answers[0],
+    answer2: quiz.answers[1]
+  }
+  console.log(`payload`,payload)
+  return { type: types.SET_QUIZ_INTO_STATE, payload }
+}
 
-export function resetForm() { }
 
+export function inputChange({name, value}) {
+  const payload = { name, value };
+  return { type: types.INPUT_CHANGE, payload}
+ }
+
+export function resetForm() {
+  return {
+    type: types.RESET_FORM,
+  }
+}
+// 
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
+    axios.get(`http://localhost:9000/api/quiz/next`)
+         .then((res) => 
+         setQuiz(res.data))
+         .catch((err) => 
+          setMessage(err.response.data.message))
     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
     // On successful GET:
     // - Dispatch an action to send the obtained quiz to its state
