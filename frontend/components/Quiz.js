@@ -1,11 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
-export default function Quiz(props) {
+function Quiz(props) {
+  console.log(`quiz props`, props)
+  const { quiz, message, selected } = props
   return (
     <div id="wrapper">
       {
-        // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
-        true ? (
+        quiz ? (
           <>
             <h2>What is a closure?</h2>
 
@@ -32,3 +34,9 @@ export default function Quiz(props) {
     </div>
   )
 }
+
+export default connect(st => ({
+  quiz: st.quiz,
+  message: st.infoMessage,
+  selected: st.selectedAnswer
+}), {})(Quiz);
