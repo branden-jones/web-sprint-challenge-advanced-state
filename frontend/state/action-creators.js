@@ -1,7 +1,9 @@
 // ❗ You don't need to add extra action creators to achieve MVP
 
 import * as types from "./action-types"
+import { useReducer } from "react";
 import axios from "axios";
+
 
 export function moveClockwise(num) {
   let payload = num + 1
@@ -23,6 +25,7 @@ export function moveCounterClockwise(num) {
 
 
 export function selectAnswer(props) {
+  console.log(`creator`,props)
   let payload = props;
   if ( payload === null || payload === ''){
     payload = 'selected'
@@ -39,14 +42,16 @@ export function setMessage(message) {
 }
 
 export function setQuiz(quiz) {
+ if (!quiz) {
+  return { type: types.SET_QUIZ_INTO_STATE, payload: quiz }
+} else {
   const payload = {
     id: quiz.quiz_id,
-    quesiton: quiz.question,
-    answer1: quiz.answers[0],
-    answer2: quiz.answers[1]
-  }
-  console.log(`payload`,payload)
+    question: quiz.question,
+    answers: quiz.answers
+  } 
   return { type: types.SET_QUIZ_INTO_STATE, payload }
+ } 
 }
 
 
@@ -64,14 +69,16 @@ export function resetForm() {
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
+    dispatch(setQuiz(null))
     axios.get(`http://localhost:9000/api/quiz/next`)
-         .then((res) => 
-         setQuiz(res.data))
+         .then((res) => {
+         dispatch(setQuiz(res.data))})
          .catch((err) => 
           setMessage(err.response.data.message))
     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
     // On successful GET:
     // - Dispatch an action to send the obtained quiz to its state
+
   }
 }
 export function postAnswer() {

@@ -19,14 +19,13 @@ function wheel(state = initialWheelState, action) {
   }
 }
 
-const initialQuizState = true
+const initialQuizState = null
 function quiz(state = initialQuizState, action) {
+  // console.log(action)
   switch (action.type) {
     case types.SET_QUIZ_INTO_STATE:
-      console.log(action.payload)
-      return {
-        quiz: action.payload
-      }
+      console.log(`reducer`, action.payload)
+      return action.payload
       default:
         return state
   }
