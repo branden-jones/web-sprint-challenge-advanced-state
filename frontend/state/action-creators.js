@@ -1,7 +1,6 @@
 // ❗ You don't need to add extra action creators to achieve MVP
 
 import * as types from "./action-types"
-import { useReducer } from "react";
 import axios from "axios";
 
 
@@ -25,13 +24,8 @@ export function moveCounterClockwise(num) {
 
 
 export function selectAnswer(props) {
-  console.log(`creator`,props)
-  let payload = props;
-  if ( payload === null || payload === ''){
-    payload = 'selected'
-  }
-  else { payload = ''}
-    return {type: types.SET_SELECTED_ANSWER, payload}
+  const payload = props;
+  return {type: types.SET_SELECTED_ANSWER, payload}
   
   }
 
@@ -48,7 +42,7 @@ export function setQuiz(quiz) {
   const payload = {
     id: quiz.quiz_id,
     question: quiz.question,
-    answers: quiz.answers
+    answers: quiz.answers,
   } 
   return { type: types.SET_QUIZ_INTO_STATE, payload }
  } 
@@ -83,6 +77,11 @@ export function fetchQuiz() {
 }
 export function postAnswer() {
   return function (dispatch) {
+    // axios.post(`[POST] http://localhost:9000/api/quiz/new`,{ "question_text": "Love JS?", "true_answer_text": "yes", "false_answer_text": "nah" })
+    //      .then((res) => {
+    //       console.log(res)
+    //      })
+    //      .catch((err) => console.log(`NOOOOOO`,err))
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state

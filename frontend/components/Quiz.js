@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { selectAnswer, fetchQuiz, setQuiz } from '../state/action-creators';
 
 function Quiz(props) {
-console.log(`Quiz Props`,props)
-  const { quiz, selectedAnswer, selectAnswer, fetchQuiz } = props;
+  const { quiz, selectAnswer, selectedAnswer, fetchQuiz } = props;
 
   useEffect(() => {
   if (!quiz){
@@ -22,14 +21,14 @@ console.log(`Quiz Props`,props)
                   <h2>{quiz.question}</h2>
                   <div id="quizAnswers">
                     {
-                      quiz.answers.map((option, idx) => (
+                      quiz.answers.map((option) => (
                       <div 
                         key={option.answer_id}
-                        className={`answer ${quiz.answers[idx].answer_id === option.answer_id ? 'selected' : ''}`}
-                      >{console.log(option.answer_id, quiz.answers[idx].answer_id)}
+                        className={`answer ${selectedAnswer === option.answer_id ? 'selected' : ''}`}
+                      >
                         {option.text}
-                        <button onClick={() => selectAnswer(quiz.answers.answer_id)}>
-                          {selectedAnswer ? `SELECTED` : 
+                        <button onClick={() => selectAnswer(option.answer_id)}>
+                          {selectedAnswer === option.answer_id ? `SELECTED` : 
                           `Select`}
                         </button>
                       </div>
