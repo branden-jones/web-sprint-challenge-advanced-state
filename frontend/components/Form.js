@@ -1,33 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import * as actionCreators from '../state/action-creators'
+import * as actionCreators from '../state/action-creators';
 
 export function Form(props) {
-  const { form, infoMessage } = props
-  // console.log(`form props`, props)
+  const { postQuiz, inputChange, newFalseAnswer, newQuestion, newTrueAnswer } = props
+
+  const disabled = () => {
+  if ( newFalseAnswer && newFalseAnswer.trim().length > 1 
+    && newQuestion && newQuestion.trim().length > 1 
+    && newTrueAnswer && newTrueAnswer.trim().length > 1 ) {
+    return false
+  }
+    return true;
+  }
 
   const onChange = evt => {
+    evt.preventDefault();
     const name = evt.target.id;
     const value = evt.target.value;
-    actionCreators.inputChange({ name, value })
+    inputChange({ name, value })
   }
 
   const onSubmit = evt => {
-    console.log(evt.target.value)
-    console.log(evt.target)
+    evt.preventDefault();
+    postQuiz(newQuestion, newTrueAnswer, newFalseAnswer)
+    
   }
 
   return (
     <form id="form" onSubmit={onSubmit}>
       <h2>Create New Quiz</h2>
-      <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" />
-      <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" />
-      <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" />
-      {/*  The "Submit new quiz" button in the form stays disabled until all inputs have values such that value.trim().length > 0.
+      <input maxLength={50} minLength={2} onChange={onChange} id="newQuestion" placeholder="Enter question" value={newQuestion} />
+
+      <input maxLength={50} minLength={2} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" value={newTrueAnswer} />
+
+      <input maxLength={50} minLength={2} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" value={newFalseAnswer} />
+      {/* 
 Submitting a new quiz successfully adds it to the roster of questions that cycle through the quiz screen.*/}
-      <button id="submitNewQuizBtn">Submit new quiz</button>
+      <button
+        id="submitNewQuizBtn"
+        onClick={() => {onSubmit}}
+        disabled={disabled()}
+      >
+        Submit new quiz
+      </button>
     </form>
   )
 }
 
-export default connect(st => st, actionCreators)(Form)
+export default connect(st => ({
+  newQuestion: st.form.newQuestion,
+  newTrueAnswer: st.form.newTrueAnswer,
+  newFalseAnswer: st.form.newFalseAnswer
+}), actionCreators)(Form)

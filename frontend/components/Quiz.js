@@ -6,13 +6,11 @@ function Quiz(props) {
   const { quiz, selectAnswer, selectedAnswer, fetchQuiz, postAnswer } = props;
 
   useEffect(() => {
-  if (!quiz){
-    fetchQuiz()
-  }
-}, [quiz])
+    if (!quiz){
+      fetchQuiz()
+    }
+  }, [quiz])
 
-// step one... get quiz coming from axios... what is the request question and options....
-// step two... map options... with key = optionId... if key = optionId... 'selected' : ''
   return (
     <div id="wrapper">
       {
@@ -27,7 +25,7 @@ function Quiz(props) {
                         className={`answer ${selectedAnswer === option.answer_id ? 'selected' : ''}`}
                       >
                         {option.text}
-                        <button onClick={() => selectAnswer(option.answer_id)}>
+                        <button onClick={() => selectAnswer(option.answer_id, selectedAnswer)}>
                           {selectedAnswer === option.answer_id ? `SELECTED` : 
                           `Select`}
                         </button>
@@ -35,7 +33,13 @@ function Quiz(props) {
                       ))
                     }
                       {/* The "Submit answer" button in the quiz stays disabled until an answer is selected. */}
-                    {selectedAnswer ? <button id="submitAnswerBtn" onClick={() => postAnswer(quiz.id, selectedAnswer)}>Submit answer</button> : <button>Submit answer</button>}
+                    <button 
+                      id="submitAnswerBtn"
+                      onClick={() => postAnswer(quiz.id, selectedAnswer)}
+                      disabled={selectedAnswer ? false : true}
+                    >
+                        Submit answer
+                    </button>
                   </div>
                 </>
               ) : 'Loading next quiz...'

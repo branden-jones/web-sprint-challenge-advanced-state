@@ -1,7 +1,3 @@
-// ❗ You don't need to add extra reducers to achieve MVP
-
-// ********   REDUCER    ********
-
 import { combineReducers } from 'redux';
 import * as types from "./action-types";
 
@@ -44,7 +40,6 @@ const initialMessageState = ''
 function infoMessage(state = initialMessageState, action) {
   switch (action.type){
     case types.SET_INFO_MESSAGE:
-      console.log(`info`,action)
       return action.payload
     default:
       return state
@@ -60,15 +55,15 @@ const initialFormState = {
 function form(state = initialFormState, action) {
   switch (action.type){
     case types.INPUT_CHANGE:
-      const { name, value } = action.payload;
-      if ( Object.keys(state).includes(name) )
+      const { name,value } = action.payload
+      console.log(action.payload)
+      if (Object.keys(state).includes(name)) {
       return {
         ...state,
-        [name]: value
-      };
+        [name]: value}
+      } return state
     case types.RESET_FORM:
-      state = initialFormState;
-      return state;
+      return initialFormState
     default:
       return state
   }
