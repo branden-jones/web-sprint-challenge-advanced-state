@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
-import { selectAnswer, fetchQuiz, setQuiz } from '../state/action-creators';
+import { selectAnswer, postAnswer, fetchQuiz, setQuiz } from '../state/action-creators';
 
 function Quiz(props) {
-  const { quiz, selectAnswer, selectedAnswer, fetchQuiz } = props;
+  const { quiz, selectAnswer, selectedAnswer, fetchQuiz, postAnswer } = props;
 
   useEffect(() => {
   if (!quiz){
@@ -35,7 +35,7 @@ function Quiz(props) {
                       ))
                     }
                       {/* The "Submit answer" button in the quiz stays disabled until an answer is selected. */}
-                    <button id="submitAnswerBtn" onClick={() => fetchQuiz()}>Submit answer</button>
+                    {selectedAnswer ? <button id="submitAnswerBtn" onClick={() => postAnswer(quiz.id, selectedAnswer)}>Submit answer</button> : <button>Submit answer</button>}
                   </div>
                 </>
               ) : 'Loading next quiz...'
@@ -48,7 +48,6 @@ function Quiz(props) {
 export default connect(st => ({
   form: st.form,
   quiz: st.quiz,
-  infoMessage: st.infoMessage,
   selectedAnswer: st.selectedAnswer
 })
-,{selectAnswer: selectAnswer, fetchQuiz:fetchQuiz, setQuiz: setQuiz})(Quiz);
+,{selectAnswer: selectAnswer, postAnswer: postAnswer, setQuiz: setQuiz, fetchQuiz: fetchQuiz})(Quiz);

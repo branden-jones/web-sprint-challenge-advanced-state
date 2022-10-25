@@ -44,6 +44,7 @@ const initialMessageState = ''
 function infoMessage(state = initialMessageState, action) {
   switch (action.type){
     case types.SET_INFO_MESSAGE:
+      console.log(`info`,action)
       return action.payload
     default:
       return state

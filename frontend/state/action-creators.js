@@ -24,6 +24,7 @@ export function moveCounterClockwise(num) {
 
 
 export function selectAnswer(props) {
+  console.log(`props`, props)
   const payload = props;
   return {type: types.SET_SELECTED_ANSWER, payload}
   
@@ -31,7 +32,7 @@ export function selectAnswer(props) {
 
 
 export function setMessage(message) {
-  const payload = `${message}`;
+  let payload = message;
   return { type: types.SET_INFO_MESSAGE, payload}
 }
 
@@ -66,22 +67,26 @@ export function fetchQuiz() {
     dispatch(setQuiz(null))
     axios.get(`http://localhost:9000/api/quiz/next`)
          .then((res) => {
-         dispatch(setQuiz(res.data))})
+          dispatch(setQuiz(res.data))})
          .catch((err) => 
-          setMessage(err.response.data.message))
+          dispatch(setMessage(err.response.data.message)))
     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
     // On successful GET:
     // - Dispatch an action to send the obtained quiz to its state
 
   }
 }
-export function postAnswer() {
+export function postAnswer(quiz_id, answer_id) {
+
   return function (dispatch) {
-    // axios.post(`[POST] http://localhost:9000/api/quiz/new`,{ "question_text": "Love JS?", "true_answer_text": "yes", "false_answer_text": "nah" })
-    //      .then((res) => {
-    //       console.log(res)
-    //      })
-    //      .catch((err) => console.log(`NOOOOOO`,err))
+    axios.post(`http://localhost:9000/api/quiz/answer`,{"quiz_id": `${quiz_id}`, "answer_id": `${answer_id}`})
+         .then((res) => {
+          dispatch(selectAnswer(null))
+          dispatch(setMessage(res.data.message))
+          dispatch(fetchQuiz())
+         })
+         .catch((err) => 
+          dispatch(setMessage(err.response.request.statusText)))
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
